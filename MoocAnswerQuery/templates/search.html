@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>超星学习通答案查询</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <main class="col-sm-8 offset-sm-2 col-md-4 offset-md-4 col-lg-4 offset-lg-4">
+        <form action="#">
+            <div class="form-group">
+                <h3 class="text-center">超星学习通答案查询</h3>
+            </div>
+            <div class="form-group">
+                <label>课程名称:</label>
+                <input type="text" class="form-control" name="course" placeholder="课程名称,可不填但是会降低答案准确率">
+            </div>
+            <!-- <div class="form-group">
+                <label>题目类型:</label>
+                <select name="courseType" class="form-control">
+                    <option value="1">单选题</option>
+                    <option value="2">多选题</option>
+                    <option value="3">判断题</option>
+                </select>
+            </div> -->
+            <div class="form-group">
+                <label>题目:</label>
+                <input type="text" class="form-control" name="question" placeholder="题目">
+            </div>
+            <div class="form-group">
+                <button type="button" id="search" class="btn btn-primary btn-block">搜索</button>
+            </div>
+            <div class="form-group">
+                <label>答案:</label>
+                <div type="text" id="answer" class="form-control text-center">答案会在这里显示喔</div>
+            </div>
+        </form>
+    </main>
+    <footer>
+        <h5 class="text-center">有问题发送邮件到x.qf@foxmail.com</h5>
+    </footer>
+</body>
+<script>
+    function $(tagCss){
+        tags = document.querySelectorAll(tagCss);
+        if (tags.length == 1){
+            return tags[0];
+        }
+        else if(tags.length > 1){
+            return tags;
+        }
+        else{
+            return null;
+        }
+    }
+    document.body.onmouseenter = function(e){
+        $("input[name=question]")();
+    }
+    document.getElementById("search").onclick = function(e){
+        let formdata = new FormData();
+        let course = $("input[name=course]").value;
+        let question = $("input[name=question]").value;
+        formdata.append("course",course.replace(/\s/,""));
+        formdata.append("question",question.replace(/\s/,""));
+        fetch("search/",{
+            method:"POST",
+            body:formdata,
+            cache:"no-cache"
+        }).then(response => response.json()).then(function(data){
+            $("#answer").innerHTML = data["data"];
+        });
+    }
+</script>
+</html>
